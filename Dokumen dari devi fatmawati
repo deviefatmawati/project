@@ -1,0 +1,134 @@
+class Transaction:
+
+  def __init__(self, transaction_id):
+    self.transaction_id = transaction_id
+    self.items = []
+
+  def add_item(self):
+    nama_item = input("Enter item name: ")
+    jumlah_item = input("Enter item amount: ")
+    harga_per_item = input("Enter price per item: ")
+
+    # validate input
+    if not nama_item or not jumlah_item or not harga_per_item:
+      print("Error: All fields are required.")
+      return
+    if not nama_item.isalpha():
+      print("Error: Item name must be a string.")
+      return
+    if not jumlah_item.isnumeric() or not harga_per_item.isnumeric():
+      print("Error: Item amount and price per item must be numbers.")
+      return
+
+    self.items.append({
+      "name": nama_item,
+      "amount": int(jumlah_item),
+      "price": int(harga_per_item)
+    })
+
+  def update_item_name(self, nama_item, update_item_name):
+    for item in self.items:
+      if item["name"] == nama_item:
+        item["name"] = update_item_name
+        break
+    else:
+      print("Error: Item not found.")
+
+  def update_item_qty(self, nama_item, update_number_item):
+    for item in self.items:
+      if item["name"] == nama_item:
+        item["amount"] = update_number_item
+        break
+    else:
+      print("Error: Item not found.")
+
+  def update_item_price(self, nama_item, update_harga_per_item):
+    for item in self.items:
+      if item["name"] == nama_item:
+        item["price"] = update_harga_per_item
+        break
+    else:
+      print("Error: Item not found.")
+
+  def delete_item(self, nama_item):
+    for index, item in enumerate(self.items):
+      if item["name"] == nama_item:
+        del self.items[index]
+        break
+    else:
+      print("Error: Item not found.")
+
+  def reset_transaction(self):
+    self.items = []
+
+  def check_order(self):
+    if not self.items:
+      print("No items found.")
+      return
+
+    for item in self.items:
+      print(f"{item['name']} - {item['amount']} x {item['price']}")
+
+  def total_price(self):
+    total = sum([item["amount"] * item["price"] for item in self.items])
+    print(f"Total price: {total}")
+
+    if total > 200000:
+      print("You get a 5% discount!")
+    elif total > 300000:
+      print("You get an 8% discount!")
+    elif total > 500000:
+      print("You get a 10% discount!")
+
+
+def main():
+  while True:
+    transaction_id = input("Enter transaction ID: ")
+    transaction = Transaction(transaction_id)
+
+    while True:
+      print("1. Add item")
+      print("2. Update item name")
+      print("3. Update item quantity")
+      print("4. Update item price")
+      print("5. Delete item")
+      print("6. Reset transaction")
+      print("7. Check order")
+      print("8. Check total price")
+      print("9. Exit")
+
+      choice = input("Enter choice: ")
+
+      if choice == "1":
+        transaction.add_item()
+      elif choice == "2":
+        nama_item = input("Enter item name: ")
+        update_item_name = input("Enter new item name: ")
+        transaction.update_item_name(nama_item, update_item_name)
+      elif choice == "3":
+        nama_item = input("Enter item name: ")
+        update_number_item = input("Enter new item quantity: ")
+        transaction.update_item_qty(nama_item, update_number_item)
+      elif choice == "4":
+        nama_item = input("Enter item name: ")
+        update_harga_per_item = input("Enter new item price: ")
+        transaction.update_item_price(nama_item, update_harga_per_item)
+      elif choice == "5":
+        nama_item = input("Enter item name: ")
+        transaction.delete_item(nama_item)
+      elif choice == "6":
+        confirm = input(
+          "Are you sure you want to reset the transaction? (y/n)")
+        if confirm == "y":
+          transaction.reset_transaction()
+      elif choice == "7":
+        transaction.check_order()
+      elif choice == "8":
+        transaction.total_price()
+      elif choice == "9":
+        break
+      else:
+        print("Invalid choice.")
+
+if __name__=="__main__":
+    main()
